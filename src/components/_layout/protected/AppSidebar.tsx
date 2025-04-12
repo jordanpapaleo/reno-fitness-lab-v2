@@ -1,5 +1,3 @@
-// https://lucide.dev/icons/clipboard-plus
-import { Blocks, Calendar, ChartPie, ChevronDown, ClipboardPlus, Cog, Database, Dumbbell, Inbox, LogOut, Search, Settings, TestTubes, UserRound } from "lucide-react"
 
 
 
@@ -17,59 +15,43 @@ import {
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
+import { getRoutes, NavItem, Routes } from "@/config/routes"
+import { iconMap } from "@/components/ui/iconMap"
+import { ChevronDown } from "lucide-react"
 
-// Menu items.
-const items = [
-  {
-    title: "Dashboard",
-    url: "/lab/dashboard",
-    icon: ChartPie,
-  },
-  {
-    title: "Current Workout",
-    url: "/lab/current-workout",
-    icon: Dumbbell,
-  },
-  {
-    title: "Workouts",
-    url: "/lab/workouts",
-    icon: Blocks,
-  },
-  {
-    title: "Cycles",
-    url: "/lab/cycles",
-    icon: TestTubes,
-  },
+type Plop = Omit<NavItem, "iconId"> & {
+  icon: React.FC<React.SVGProps<SVGSVGElement>> | undefined
+}
 
-  {
-    title: "Check In",
-    url: "/lab/checkin",
-    icon: ClipboardPlus,
-  },
-  {
-    title: "Exercises",
-    url: "/lab/exercises",
-    icon: Database,
-  },
-  {
-    title: "Custom Exercises",
-    url: "/lab/custom-exercises",
-    icon: Cog,
-  },
-]
 
-const bottomNav = [
-  {
-    title: "Profile",
-    url: "/lab/profile",
-    icon: UserRound,
-  },
-  {
-    title: "Sign Out",
-    url: "#",
-    icon: LogOut,
-  },
-]
+const topRoutes:Plop[] = getRoutes('main', [
+  Routes.DASHBOARD,
+  Routes.CURRENT_WORKOUT,
+  Routes.WORKOUTS,
+  Routes.CYCLES,
+  Routes.CHECK_IN,
+  Routes.EXERCISES,
+  Routes.CUSTOM_EXERCISES,
+]).map((route) => ({
+  ...route,
+  icon: iconMap.get(route?.iconId),
+}))
+
+const bottomRoutes: Plop[] = getRoutes('main', [
+  Routes.PROFILE
+]).map((route) => ({
+  ...route,
+  icon: iconMap.get(route?.iconId),
+}))
+
+bottomRoutes.push({
+  path: '#',
+  icon: iconMap.get('log-out'),
+  title: 'Log out',
+} as Plop)
+
+
+console.log(bottomRoutes)
 
 export function AppSidebar() {
   return (
@@ -102,39 +84,35 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
-          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <NavLinks routes={topRoutes} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter>
-        <SidebarMenu>
-          {bottomNav.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
-                <Link href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
+        <NavLinks routes={bottomRoutes} />
       </SidebarFooter>
     </Sidebar>
   )
 }
+
+
+const NavLinks = ({ routes }: { routes: Plop[] }) => (
+  <SidebarMenu>
+    {routes.map((route) => (
+      <SidebarMenuItem key={route.title}>
+        <SidebarMenuButton asChild>
+          <Link href={route.path}>
+            {route.icon && <route.icon />}
+            <span>{route.title}</span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    ))}
+  </SidebarMenu>
+)

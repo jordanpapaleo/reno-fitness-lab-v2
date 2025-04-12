@@ -7,7 +7,7 @@ import { createClient } from '@/utils/supabase/server'
 
 import { DbTables } from '../tables'
 
-export async function dbUpdateProfile(
+export async function updateProfile(
   profileId: string,
   profileUpdate: ProfileInputT,
 ) {

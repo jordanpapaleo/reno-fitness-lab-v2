@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useRouter } from 'next/navigation';
 // import { toast } from "@/components/hooks/use-toast"
-import { Button } from "@/components/ui/button"
+
 import {
   Form,
   FormControl,
@@ -15,6 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import SubmitButton from "@/components/SubmitButton";
+import { forgotPassword, signIn } from "./actions";
 
 const FormSchema = z.object({
   username: z.string(),
@@ -76,8 +78,8 @@ export default function LoginForm() {
         />
 
         <div className="grid grid-cols-2 gap-4">
-          <Button type="submit">Submit</Button>
-          <Button variant="link">Forgot Password</Button>
+          <SubmitButton type="submit" formAction={signIn}>Submit</SubmitButton>
+          <SubmitButton variant="link" formAction={forgotPassword}>Forgot Password</SubmitButton>
         </div>
       </form>
     </Form>

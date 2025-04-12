@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { routes } from '@/config/appRoutes'
+import { Routes } from '@/config/routes'
 import { createClient } from '@/utils/supabase/server'
 
 export async function signIn(formData: FormData) {
@@ -19,31 +19,31 @@ export async function signIn(formData: FormData) {
 
   if (error) {
     const message = error.message || 'Could not authenticate user'
-    redirect(`${routes.login}?error=${message}`)
+    redirect(`${Routes.LOGIN}?error=${message}`)
   }
 
   revalidatePath('/', 'layout')
-  redirect(routes.members)
+  redirect(Routes.LAB)
 }
 
-export async function signUp(formData: FormData) {
-  const supabase = createClient()
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
+// export async function signUp(formData: FormData) {
+//   const supabase = createClient()
+//   const email = formData.get('email') as string
+//   const password = formData.get('password') as string
 
-  const { data: signupData, error: signupError } = await supabase.auth.signUp({
-    email,
-    password,
-  })
+//   const { data: signupData, error: signupError } = await supabase.auth.signUp({
+//     email,
+//     password,
+//   })
 
-  if (signupError) {
-    const message = signupError.message || 'Could not create user'
-    redirect(`${routes.login}?error=${message}`)
-  }
+//   if (signupError) {
+//     const message = signupError.message || 'Could not create user'
+//     redirect(`${routes.login}?error=${message}`)
+//   }
 
-  revalidatePath('/', 'layout')
-  redirect(`${routes.login}?success=Check email to continue sign in process`)
-}
+//   revalidatePath('/', 'layout')
+//   redirect(`${routes.login}?success=Check email to continue sign in process`)
+// }
 /*
 http://localhost:3003/api/auth/confirm?token_hash=pkce_ba4e719edee891c16138854c4f55f8ebac51a7956ce68983df2139aa&type=recovery
 */

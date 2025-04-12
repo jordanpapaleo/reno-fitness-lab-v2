@@ -2,8 +2,8 @@
 
 import { createClient } from '@/utils/supabase/server'
 
-import { DbTables } from '../tables'
 import { ProfileT } from '@/types/dbTypes'
+import { DbTables } from '../tables'
 
 export async function getAuthProfile() {
   const supabase = await createClient()

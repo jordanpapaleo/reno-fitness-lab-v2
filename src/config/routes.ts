@@ -20,23 +20,27 @@ export enum Roles {
 }
 
 export enum Routes {
-  CURRENT_WORKOUT = '/rfl/current-workout',
-  CUSTOM_EXERCISES = '/rfl/custom-exercises',
-  DASHBOARD = '/rfl/dashboard',
+  CHECK_IN = '/lab/checkin',
+  CURRENT_WORKOUT = '/lab/current-workout',
+  CUSTOM_EXERCISES = '/lab/custom-exercises',
+  CYCLES = '/lab/cycles',
+  DASHBOARD = '/lab/dashboard',
   ERROR = '/error',
+  EXERCISES = '/lab/exercises',
+  LAB = '/lab',
   LOGIN = '/login',
-  MESOCYCLE = '/rfl/mesocycle',
+  MURPH = '/murph',
   NOT_FOUND = '/not-found',
-  PROTECTED = '/protected',
   ROOT = '/',
   STYLEGUIDE = '/styleguide',
-  TEMPLATES = '/rfl/templates',
+  PROFILE = '/lab/profile',
+  WORKOUTS = '/lab/workouts',
 }
 
 export interface NavItem {
   authentication: boolean
   authorization: UserRole[]
-  icon?: React.FC<React.SVGProps<SVGSVGElement>>
+  iconId?: string
   navLocations: NavLocations[]
   path: string
   title: string
@@ -48,80 +52,108 @@ export enum NavLocation {
   FOOTER = 'footer',
 }
 
-export const getRoutes = (location?: NavLocations): NavItem[] => {
-  return [
-    {
-      authentication: false,
-      authorization: [],
-      navLocations: ['main', 'mobile'] as NavLocations[],
-      path: Routes.DASHBOARD,
-      title: 'Dashboard',
-    },
-    {
-      authentication: false,
-      authorization: [],
-      navLocations: ['main', 'mobile'] as NavLocations[],
-      path: Routes.CURRENT_WORKOUT,
-      title: 'Current Workout',
-    },
-    {
-      authentication: false,
-      authorization: [],
-      navLocations: ['main', 'mobile'] as NavLocations[],
-      path: Routes.MESOCYCLE,
-      title: 'Mesocycle',
-    },
-    {
-      authentication: false,
-      authorization: [],
-      navLocations: ['main', 'mobile'] as NavLocations[],
-      path: Routes.TEMPLATES,
-      title: 'Templates',
-    },
-    {
-      authentication: false,
-      authorization: [],
-      navLocations: ['main', 'mobile'] as NavLocations[],
-      path: Routes.CUSTOM_EXERCISES,
-      title: 'Custom Exercises',
-    },
-    {
-      authentication: false,
-      authorization: [],
-      navLocations: [] as NavLocations[],
-      path: Routes.LOGIN,
-      title: 'Profile',
-    },
-    {
-      authentication: false,
-      authorization: [],
-      navLocations: [],
-      path: Routes.LOGIN,
-      title: 'Login',
-    },
-    {
-      authentication: false,
-      authorization: [],
-      navLocations: [],
-      path: Routes.ROOT,
-      title: 'Home',
-    },
-    {
-      authentication: true,
-      authorization: [],
-      navLocations: [],
-      path: Routes.PROTECTED,
-      title: 'Protected',
-    },
-    {
-      authentication: false,
-      authorization: [Roles.ADMIN],
-      navLocations: ['footer'] as NavLocations[],
-      path: Routes.STYLEGUIDE,
-      title: 'Style Guide',
-    },
-  ].filter((route) => {
-    if (!location) return true
-    return route.navLocations.includes(location as NavLocations)
-  })
+const APP_ROUTES: NavItem[] = [
+  {
+    authentication: true,
+    authorization: [],
+    iconId: 'chart-pie',
+    navLocations: ['main', 'mobile'] as NavLocations[],
+    path: Routes.DASHBOARD,
+    title: 'Dashboard',
+  },
+  {
+    authentication: true,
+    authorization: [],
+    iconId: 'blocks',
+    navLocations: ['main', 'mobile'] as NavLocations[],
+    path: Routes.CURRENT_WORKOUT,
+    title: 'Workout',
+  },
+  {
+    authentication: true,
+    authorization: [],
+    iconId: 'clipboard-plus',
+    navLocations: ['main', 'mobile'] as NavLocations[],
+    path: Routes.CHECK_IN,
+    title: 'Check In',
+  },
+  {
+    authentication: true,
+    authorization: [],
+    iconId: 'dumbbell',
+    navLocations: ['main', 'mobile'] as NavLocations[],
+    path: Routes.WORKOUTS,
+    title: 'Workouts',
+  },
+  {
+    authentication: true,
+    authorization: [],
+    iconId: 'test-tubes',
+    navLocations: ['main', 'mobile'] as NavLocations[],
+    path: Routes.CYCLES,
+    title: 'Cycles',
+  },
+  {
+    authentication: true,
+    authorization: [],
+    iconId: 'cog',
+    navLocations: ['main', 'mobile'] as NavLocations[],
+    path: Routes.CUSTOM_EXERCISES,
+    title: 'Custom Exercises',
+  },
+  {
+    authentication: true,
+    authorization: [],
+    iconId: 'database',
+    navLocations: ['main', 'mobile'] as NavLocations[],
+    path: Routes.EXERCISES,
+    title: 'Exercises',
+  },
+  {
+    authentication: true,
+    authorization: [],
+    iconId: 'user-round',
+    navLocations: ['main', 'mobile'] as NavLocations[],
+    path: Routes.PROFILE,
+    title: 'Profile',
+  },
+  {
+    authentication: false,
+    authorization: [],
+    navLocations: [],
+    path: Routes.LOGIN,
+    title: 'Login',
+  },
+  {
+    authentication: false,
+    authorization: [],
+    navLocations: [],
+    path: Routes.ROOT,
+    title: 'Home',
+  },
+  {
+    authentication: false,
+    authorization: [],
+    navLocations: ['footer'],
+    path: Routes.MURPH,
+    title: 'Murph',
+  },
+  {
+    authentication: false,
+    authorization: [Roles.ADMIN],
+    navLocations: ['footer'] as NavLocations[],
+    path: Routes.STYLEGUIDE,
+    title: 'Style Guide',
+  },
+]
+
+export const getRoutes = (location: NavLocations, routeOrder?: Routes[]): NavItem[] => {
+  let routesToFilter = APP_ROUTES
+
+  if (routeOrder && routeOrder.length > 0) {
+     routesToFilter = routeOrder
+      .map((route) => APP_ROUTES.find((r) => r.path === route)) as NavItem[]
+  }
+
+  return routesToFilter.filter((route) => route.navLocations.includes(location as NavLocations))
 }
