@@ -76,6 +76,7 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.213 47.604);
+
 }
 
 .dark {
@@ -112,12 +113,17 @@
   --sidebar-ring: oklch(0.646 0.222 41.116);
 }
 
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .btn-link {
+    @apply text-primary transition-all underline-offset-4 font-medium text-sm py-2 px-4 h-9;
   }
 }

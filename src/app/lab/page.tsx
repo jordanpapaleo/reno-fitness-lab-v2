@@ -1,3 +1,5 @@
+import ProtectedLayout from "@/components/_layout/protected/ProtectedLayout";
+
 export default function LabPage() {
-  return <div>Lab</div>
+  return <ProtectedLayout>Lab</ProtectedLayout>
 }

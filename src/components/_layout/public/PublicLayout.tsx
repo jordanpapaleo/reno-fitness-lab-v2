@@ -1,5 +1,6 @@
 import Frame from '@/components/Frame'
 import Poster from '@/components/Poster'
+import PageFooter from './PageFooter'
 
 export default function PublicLayout({children}: {children: React.ReactNode}) {
   return (
@@ -14,6 +15,7 @@ export default function PublicLayout({children}: {children: React.ReactNode}) {
           </h1>
           {children}
         </div>
+        <PageFooter className="absolute top-[100%] dark w-full" />
       </Poster>
   )
 }

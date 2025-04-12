@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import Link from "next/link";
 
 const FormSchema = z.object({
   username: z.string(),
@@ -60,7 +61,7 @@ export default function InviteForm() {
 
         <div className="grid grid-cols-2 gap-4">
           <Button type="submit">Submit</Button>
-          <Button variant="link">Cancel</Button>
+          <Link className="btn-link" href="/">Cancel</Link>
         </div>
       </form>
     </Form>
